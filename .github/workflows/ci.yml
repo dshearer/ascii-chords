@@ -1,7 +1,9 @@
-name: Deploy to GitHub Pages
+name: Test and deploy
 
 on:
   push:
+    branches: [ main ]
+  pull_request:
     branches: [ main ]
   workflow_dispatch:
 
@@ -15,8 +17,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Build job
-  build:
+  # Test job
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -25,17 +27,25 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: lts/*
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright browsers
-        run: npm run playwright:install
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
 
-      - name: Run tests
-        run: npm test
+      - name: Run Playwright tests
+        run: npx playwright test
+
+  # Build job (only runs on main branch)
+  build:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -46,8 +56,9 @@ jobs:
           # Upload the entire repository as static files
           path: '.'
 
-  # Deployment job
+  # Deployment job (only runs on main branch)
   deploy:
+    if: github.ref == 'refs/heads/main'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
