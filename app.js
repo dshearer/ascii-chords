@@ -174,8 +174,11 @@ function handleFretClick(string, fret) {
             
             // Set frets for all strings in the barre
             for (let s = minString; s <= maxString; s++) {
-                chordState.frets[s] = fret;
-                chordState.strings[s] = null;
+                // Only set the barre fret if there's no existing finger position on this string
+                if (chordState.frets[s] === null) {
+                    chordState.frets[s] = fret;
+                    chordState.strings[s] = null;
+                }
             }
             
             updateDiagramDisplay();
