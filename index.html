@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII Guitar Chord Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🎸 ASCII Guitar Chord Generator</h1>
+        
+        <div class="main-content">
+            <div class="builder-section">
+                <div class="builder-header">
+                    <h2>Build Your Chord</h2>
+                    <div class="controls-row">
+                        <div class="input-group-inline">
+                            <label for="chordName">Chord Name:</label>
+                            <input type="text" id="chordName" placeholder="e.g., Cmaj7" value="Custom">
+                        </div>
+                        <button id="clearBtn" class="clear-btn">Clear All</button>
+                    </div>
+                </div>
+
+                <div class="interactive-diagram">
+                    <div class="string-markers" id="stringMarkers">
+                        <div class="string-marker" data-string="0">E<button class="edit-icon" title="Edit string name">✎</button><span class="marker-state">o</span></div>
+                        <div class="string-marker" data-string="1">A<button class="edit-icon" title="Edit string name">✎</button><span class="marker-state">o</span></div>
+                        <div class="string-marker" data-string="2">D<button class="edit-icon" title="Edit string name">✎</button><span class="marker-state">o</span></div>
+                        <div class="string-marker" data-string="3">G<button class="edit-icon" title="Edit string name">✎</button><span class="marker-state">o</span></div>
+                        <div class="string-marker" data-string="4">B<button class="edit-icon" title="Edit string name">✎</button><span class="marker-state">o</span></div>
+                        <div class="string-marker" data-string="5">e<button class="edit-icon" title="Edit string name">✎</button><span class="marker-state">o</span></div>
+                    </div>
+                    <div class="diagram-grid" id="diagramGrid"></div>
+                </div>
+            </div>
+
+            <div class="output-section">
+                <h2>ASCII Output</h2>
+                <pre id="chordDiagram">Click on the diagram to build your chord</pre>
+                <button id="copyBtn" class="copy-btn">Copy to Clipboard</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

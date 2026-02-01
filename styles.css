@@ -1,0 +1,334 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 2em;
+}
+
+h2 {
+    color: #555;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+}
+
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 20px;
+}
+
+.builder-section {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.builder-header {
+    margin-bottom: 20px;
+}
+
+.controls-row {
+    display: flex;
+    gap: 15px;
+    align-items: flex-end;
+    margin-top: 15px;
+}
+
+.input-group-inline {
+    flex: 1;
+}
+
+.input-group-inline label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.input-group-inline input {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+    transition: border-color 0.3s ease;
+}
+
+.input-group-inline input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.clear-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Courier New', monospace;
+    white-space: nowrap;
+}
+
+.clear-btn:hover {
+    background: #c82333;
+}
+
+.instructions {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border-left: 4px solid #667eea;
+}
+
+.instructions p {
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.instructions ul {
+    margin-left: 20px;
+    color: #555;
+    font-size: 13px;
+}
+
+.instructions li {
+    margin-bottom: 5px;
+}
+
+.interactive-diagram {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    user-select: none;
+}
+
+.string-markers {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.string-marker {
+    padding: 8px;
+    background: #667eea;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.string-marker:hover {
+    background: #5568d3;
+    transform: scale(1.05);
+}
+
+.string-marker .edit-icon {
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 2px;
+    line-height: 1;
+}
+
+.string-marker:hover .edit-icon {
+    opacity: 1;
+}
+
+.string-marker .edit-icon:hover {
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+.string-marker .marker-state {
+    display: block;
+    font-size: 18px;
+    margin-top: 4px;
+}
+
+.diagram-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.fret-row {
+    display: contents;
+}
+
+.fret-cell {
+    aspect-ratio: 1;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 18px;
+    transition: all 0.2s ease;
+    background: white;
+    position: relative;
+}
+
+.fret-cell:hover {
+    background: #f0f0f0;
+    border-color: #667eea;
+}
+
+.fret-cell.has-finger {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.fret-cell.has-dot {
+    background: #764ba2;
+    color: white;
+    border-color: #764ba2;
+}
+
+.fret-cell.has-barre {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.fret-cell.drag-highlight {
+    background: #a8b5ff;
+    border-color: #667eea;
+}
+
+.fret-label {
+    position: absolute;
+    left: -25px;
+    font-size: 12px;
+    color: #777;
+    font-weight: bold;
+}
+
+.output-section {
+    background: #1e1e1e;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.output h2 {
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+#chordDiagram {
+    background: #2d2d2d;
+    color: #00ff00;
+    padding: 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.4;
+    overflow-x: auto;
+    white-space: pre;
+    font-family: 'Courier New', monospace;
+    border: 2px solid #444;
+}
+
+.copy-btn {
+    margin-top: 15px;
+    padding: 10px 20px;
+    font-size: 14px;
+    background: #00ff00;
+    color: #1e1e1e;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    font-family: 'Courier New', monospace;
+}
+
+.copy-btn:hover {
+    background: #00cc00;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 255, 0, 0.3);
+}
+
+.copy-btn:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 900px) {
+    .main-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    .controls-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .clear-btn {
+        width: 100%;
+    }
+
+    #chordDiagram {
+        font-size: 11px;
+    }
+
+    .diagram-grid {
+        gap: 3px;
+    }
+
+    .fret-cell {
+        font-size: 14px;
+    }
+}
