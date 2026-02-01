@@ -18,7 +18,7 @@ test.describe('String State Management', () => {
     await expect(page.getByText('o o o o o o')).toBeVisible();
 
     // Place a dot on the A string (2nd string) at fret 2
-    await page.getByText('2').click();
+    await page.locator('.fret-cell[data-fret="2"][data-string="1"]').click();
     await expect(page.getByText('●', { exact: true })).toBeVisible();
 
     // Verify the string marker no longer shows 'o' (becomes played state - blank)

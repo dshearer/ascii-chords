@@ -11,7 +11,7 @@ test.describe('Chord Management', () => {
     // Create a complex chord with barre, individual dots, muted strings, and custom string names
     
     // Add individual dots
-    await page.getByText('1').click();
+    await page.locator('.fret-cell[data-fret="1"][data-string="0"]').click();
     await page.locator('[data-string="2"][data-fret="3"]').click();
 
     // Create a barre

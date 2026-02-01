@@ -15,6 +15,26 @@ let dragState = {
     startFret: null
 };
 
+// Helper function to create fret labels with proper event handling
+function createFretLabel(fret) {
+    const label = document.createElement('div');
+    label.className = 'fret-label';
+    label.textContent = fret;
+    
+    // Prevent clicks on labels from bubbling up to the fret cell
+    label.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+    label.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+    });
+    label.addEventListener('mouseup', (e) => {
+        e.stopPropagation();
+    });
+    
+    return label;
+}
+
 // Initialize the interactive diagram grid
 function initializeDiagram() {
     const grid = document.getElementById('diagramGrid');
@@ -29,18 +49,11 @@ function initializeDiagram() {
             
             // Add fret label on first string
             if (string === 0) {
-                const label = document.createElement('div');
-                label.className = 'fret-label';
-                label.textContent = fret;
+                const label = createFretLabel(fret);
                 cell.appendChild(label);
             }
             
-            // Click handler
-            cell.addEventListener('click', (e) => {
-                handleFretClick(string, fret);
-            });
-            
-            // Mouse handlers for drag-to-create-barre
+            // Mouse handlers for drag-to-create-barre and clicks
             cell.addEventListener('mousedown', (e) => {
                 dragState.isDragging = true;
                 dragState.startString = string;
@@ -57,7 +70,15 @@ function initializeDiagram() {
             
             cell.addEventListener('mouseup', (e) => {
                 if (dragState.isDragging) {
-                    handleFretClick(string, fret);
+                    // Check if this is a single click (same position) or a drag
+                    if (dragState.startString === string && dragState.startFret === fret) {
+                        // Single click
+                        handleFretClick(string, fret);
+                    } else {
+                        // Drag operation
+                        handleFretClick(string, fret);
+                    }
+                    handleDragEnd();
                 }
             });
             
@@ -197,9 +218,7 @@ function updateDiagramDisplay() {
             if (label) {
                 cell.appendChild(label);
             } else {
-                const newLabel = document.createElement('div');
-                newLabel.className = 'fret-label';
-                newLabel.textContent = fret;
+                const newLabel = createFretLabel(fret);
                 cell.appendChild(newLabel);
             }
         } else {

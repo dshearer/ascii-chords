@@ -27,7 +27,7 @@ test('Copy to Clipboard', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Chord Name:' }).fill('Test Chord');
   
   // Place a dot
-  await page.getByText('2').click();
+  await page.locator('.fret-cell[data-fret="2"][data-string="0"]').click();
     
     // Verify ASCII diagram is visible and formatted
     await expect(page.getByText('Test Chord')).toBeVisible();

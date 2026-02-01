@@ -15,8 +15,8 @@ test.describe('ASCII Output and Export', () => {
     await expect(page.getByText('│ │ │ │ │ │')).toBeVisible();
 
     // Create a simple chord (place dots at various positions)
-    await page.getByText('1').click();
-    await page.getByText('2').click(); // This replaces the first dot since they're on the same string
+    await page.locator('.fret-cell[data-fret="1"][data-string="0"]').click();
+    await page.locator('.fret-cell[data-fret="2"][data-string="0"]').click(); // This replaces the first dot since they're on the same string
     
     // Verify dots appear as [●] in correct fret positions
     await expect(page.getByText('[●]')).toHaveCount(1); // Only one dot since they're on same string
@@ -38,7 +38,7 @@ test.describe('ASCII Output and Export', () => {
     await expect(page.getByText('x o o o o o')).toBeVisible();
     
     // Place a dot to create played string
-    await page.getByText('2').click();
+    await page.locator('.fret-cell[data-fret="2"][data-string="0"]').click();
     
     // Verify string states in ASCII output - E string is played, others are open
     await expect(page.locator('#chordDiagram')).toContainText('E   A   D   G   B   e');

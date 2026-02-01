@@ -22,7 +22,7 @@ test.describe('Edge Cases and Error Handling', () => {
     await page.getByRole('button', { name: 'Clear All' }).click();
     
     // Single click should place/remove dot normally
-    await page.getByText('1').click();
+    await page.locator('.fret-cell[data-fret="1"][data-string="0"]').click();
     await expect(page.getByText('●', { exact: true })).toBeVisible();
     
     await page.getByText('●', { exact: true }).click();
