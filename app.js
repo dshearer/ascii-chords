@@ -241,9 +241,9 @@ function updateDiagramDisplay() {
                 cell.classList.add('barre-middle');
             }
             
-            const dot = document.createElement('span');
-            dot.textContent = '●';
-            cell.appendChild(dot);
+            const barreSymbol = document.createElement('span');
+            barreSymbol.textContent = '=';
+            cell.appendChild(barreSymbol);
         } else if (chordState.frets[string] === fret) {
             cell.classList.add('has-dot');
             const dot = document.createElement('span');

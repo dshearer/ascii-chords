@@ -12,7 +12,7 @@ test.describe('Chord Management', () => {
     
     // Add individual dots
     await page.locator('.fret-cell[data-fret="1"][data-string="0"]').click();
-    await page.locator('[data-string="2"][data-fret="3"]').click();
+    await page.locator('[data-string="4"][data-fret="2"]').click(); // Changed to avoid conflict with barre
 
     // Create a barre
     const barreStartCell = page.locator('[data-string="1"][data-fret="3"]');
@@ -32,15 +32,17 @@ test.describe('Chord Management', () => {
     await page.getByRole('textbox', { name: 'Chord Name:' }).fill('Complex Chord');
 
     // Verify complex chord is created
-    await expect(page.getByText('●', { exact: true })).toHaveCount(4);
+    await expect(page.getByText('●', { exact: true })).toHaveCount(2); // Individual dots
+    await expect(page.getByText('=', { exact: true })).toHaveCount(3); // Barre symbols
     await expect(page.getByText('x', { exact: true })).toBeVisible();
     await expect(page.locator('.string-marker').nth(2)).toContainText('C');
 
     // Click the 'Clear All' button
     await page.getByRole('button', { name: 'Clear All' }).click();
 
-    // Verify all dots are removed from the fretboard
+    // Verify all dots and barre symbols are removed from the fretboard
     await expect(page.getByText('●', { exact: true })).toHaveCount(0);
+    await expect(page.getByText('=', { exact: true })).toHaveCount(0);
 
     // Verify all string states reset to open ('o')
     await expect(page.getByText('o o o o o o')).toBeVisible();

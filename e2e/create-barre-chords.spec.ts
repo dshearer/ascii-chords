@@ -27,7 +27,7 @@ test.describe('Basic Chord Building', () => {
     await expect(page.getByText('│ [═══════] │ │')).toBeVisible();
 
     // Click on any cell that's part of an existing barre to remove it
-    await page.getByText('●').first().click();
+    await page.getByText('=').first().click();
     await expect(page.getByText('[════════════════]')).not.toBeVisible();
   });
 });

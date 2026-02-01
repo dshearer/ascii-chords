@@ -25,12 +25,12 @@ test.describe('String State Management', () => {
     // E string has the dot so it should be blank, A-e strings should show 'o'
     await expect(page.getByText('o o o o o')).toBeVisible(); // Only 5 'o' markers now
 
-    // Try to click the A string marker - it should be able to toggle to muted even with a dot
+    // Try to click the A string marker - it should NOT toggle when there's a dot
     const aStringMarker = page.locator('.string-marker').nth(1);
     await aStringMarker.click();
     
-    // The A string should now be muted ('x') even though it has a dot
-    await expect(page.getByText('x', { exact: true })).toBeVisible();
-    await expect(page.getByText('x o o o o')).toBeVisible();
+    // The A string should still be in played state (no change)
+    await expect(page.getByText('x', { exact: true })).not.toBeVisible();
+    await expect(page.getByText('o o o o o')).toBeVisible(); // Should remain the same
   });
 });
