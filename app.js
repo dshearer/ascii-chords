@@ -15,76 +15,51 @@ let dragState = {
     startFret: null
 };
 
-// Helper function to create fret labels with proper event handling
-function createFretLabel(fret) {
-    const label = document.createElement('div');
-    label.className = 'fret-label';
-    label.textContent = fret;
-    
-    // Prevent clicks on labels from bubbling up to the fret cell
-    label.addEventListener('click', (e) => {
-        e.stopPropagation();
-    });
-    label.addEventListener('mousedown', (e) => {
-        e.stopPropagation();
-    });
-    label.addEventListener('mouseup', (e) => {
-        e.stopPropagation();
-    });
-    
-    return label;
-}
-
-// Initialize the interactive diagram grid
+// Initialize event listeners for the interactive diagram grid
 function initializeDiagram() {
-    const grid = document.getElementById('diagramGrid');
-    grid.innerHTML = '';
+    const cells = document.querySelectorAll('.fret-cell');
     
-    for (let fret = 1; fret <= NUM_FRETS; fret++) {
-        for (let string = 0; string < 6; string++) {
-            const cell = document.createElement('div');
-            cell.className = 'fret-cell';
-            cell.dataset.fret = fret;
-            cell.dataset.string = string;
-            
-            // Add fret label on first string
-            if (string === 0) {
-                const label = createFretLabel(fret);
-                cell.appendChild(label);
-            }
-            
-            // Mouse handlers for drag-to-create-barre and clicks
-            cell.addEventListener('mousedown', (e) => {
-                dragState.isDragging = true;
-                dragState.startString = string;
-                dragState.startFret = fret;
-                e.preventDefault();
-            });
-            
-            cell.addEventListener('mouseenter', (e) => {
-                if (dragState.isDragging && dragState.startFret === fret) {
-                    // Highlight the drag selection
-                    highlightDragSelection(dragState.startString, string, fret);
-                }
-            });
-            
-            cell.addEventListener('mouseup', (e) => {
-                if (dragState.isDragging) {
-                    // Check if this is a single click (same position) or a drag
-                    if (dragState.startString === string && dragState.startFret === fret) {
-                        // Single click
-                        handleFretClick(string, fret);
-                    } else {
-                        // Drag operation
-                        handleFretClick(string, fret);
-                    }
-                    handleDragEnd();
-                }
-            });
-            
-            grid.appendChild(cell);
+    cells.forEach(cell => {
+        const string = parseInt(cell.dataset.string);
+        const fret = parseInt(cell.dataset.fret);
+        
+        // Add event listeners to fret labels to prevent click bubbling
+        const label = cell.querySelector('.fret-label');
+        if (label) {
+            label.addEventListener('click', (e) => e.stopPropagation());
+            label.addEventListener('mousedown', (e) => e.stopPropagation());
+            label.addEventListener('mouseup', (e) => e.stopPropagation());
         }
-    }
+        
+        // Mouse handlers for drag-to-create-barre and clicks
+        cell.addEventListener('mousedown', (e) => {
+            dragState.isDragging = true;
+            dragState.startString = string;
+            dragState.startFret = fret;
+            e.preventDefault();
+        });
+        
+        cell.addEventListener('mouseenter', (e) => {
+            if (dragState.isDragging && dragState.startFret === fret) {
+                // Highlight the drag selection
+                highlightDragSelection(dragState.startString, string, fret);
+            }
+        });
+        
+        cell.addEventListener('mouseup', (e) => {
+            if (dragState.isDragging) {
+                // Check if this is a single click (same position) or a drag
+                if (dragState.startString === string && dragState.startFret === fret) {
+                    // Single click
+                    handleFretClick(string, fret);
+                } else {
+                    // Drag operation
+                    handleFretClick(string, fret);
+                }
+                handleDragEnd();
+            }
+        });
+    });
     
     // Global mouseup to finish drag
     document.addEventListener('mouseup', (e) => {
@@ -214,18 +189,10 @@ function updateDiagramDisplay() {
         
         // Clear content but preserve fret label if it exists
         const hasLabel = string === 0;
-        if (hasLabel) {
-            // Keep only the label, remove dot
-            const label = cell.querySelector('.fret-label');
-            cell.textContent = '';
-            if (label) {
-                cell.appendChild(label);
-            } else {
-                const newLabel = createFretLabel(fret);
-                cell.appendChild(newLabel);
-            }
-        } else {
-            cell.textContent = '';
+        const label = hasLabel ? cell.querySelector('.fret-label') : null;
+        cell.textContent = '';
+        if (label) {
+            cell.appendChild(label);
         }
         
         // Check if this position is part of a barre
