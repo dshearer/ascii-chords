@@ -14,8 +14,8 @@ test.describe('Basic Chord Building', () => {
     // Verify the interactive fretboard is visible
     await expect(page.getByText('Build Your Chord')).toBeVisible();
 
-    // Verify all string markers show 'o' (open) state
-    await expect(page.getByText('o o o o o o')).toBeVisible();
+    // Verify all string markers show 'o' (open) state in ASCII output
+    await expect(page.locator('#chordDiagram')).toContainText('   o   o   o   o   o   o');
 
     // Click on a fret cell (3rd fret, 2nd string - string index 1)
     await page.locator('.fret-cell[data-fret="3"][data-string="1"]').click();

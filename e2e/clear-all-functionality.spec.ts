@@ -44,8 +44,8 @@ test.describe('Chord Management', () => {
     await expect(page.getByText('●', { exact: true })).toHaveCount(0);
     await expect(page.getByText('=', { exact: true })).toHaveCount(0);
 
-    // Verify all string states reset to open ('o')
-    await expect(page.getByText('o o o o o o')).toBeVisible();
+    // Verify all string states reset to open ('o') in ASCII output
+    await expect(page.locator('#chordDiagram')).toContainText('   o   o   o   o   o   o');
 
     // Verify all string names reset to default (E A D G B e)
     await expect(page.getByText('E A D G B e')).toBeVisible();
