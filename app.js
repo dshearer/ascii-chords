@@ -1,9 +1,14 @@
+const STRING_STATE_OPEN = 'o';
+const STRING_STATE_MUTED = 'x';
+const STRING_STATE_PLAYED = null;
+
 // Chord state
 const chordState = {
-    strings: ['o', 'o', 'o', 'o', 'o', 'o'], // o = open, x = muted, null = played
+    strings: [STRING_STATE_OPEN, STRING_STATE_OPEN, STRING_STATE_OPEN, STRING_STATE_OPEN, STRING_STATE_OPEN, STRING_STATE_OPEN], // o = open, x = muted, null = played
     frets: [null, null, null, null, null, null], // fret number for each string
     stringNames: ['E', 'A', 'D', 'G', 'B', 'e'], // customizable string names
-    barres: [] // array of { fret, startString, endString }
+    barres: [], // array of { fret, startString, endString }
+    startFret: 1 // first fret number displayed
 };
 
 const NUM_FRETS = 5;
@@ -15,76 +20,58 @@ let dragState = {
     startFret: null
 };
 
-// Helper function to create fret labels with proper event handling
-function createFretLabel(fret) {
-    const label = document.createElement('div');
-    label.className = 'fret-label';
-    label.textContent = fret;
-    
-    // Prevent clicks on labels from bubbling up to the fret cell
-    label.addEventListener('click', (e) => {
-        e.stopPropagation();
-    });
-    label.addEventListener('mousedown', (e) => {
-        e.stopPropagation();
-    });
-    label.addEventListener('mouseup', (e) => {
-        e.stopPropagation();
-    });
-    
-    return label;
-}
-
-// Initialize the interactive diagram grid
+// Initialize event listeners for the interactive diagram grid
 function initializeDiagram() {
-    const grid = document.getElementById('diagramGrid');
-    grid.innerHTML = '';
+    const cells = document.querySelectorAll('.fret-cell');
     
-    for (let fret = 1; fret <= NUM_FRETS; fret++) {
-        for (let string = 0; string < 6; string++) {
-            const cell = document.createElement('div');
-            cell.className = 'fret-cell';
-            cell.dataset.fret = fret;
-            cell.dataset.string = string;
-            
-            // Add fret label on first string
-            if (string === 0) {
-                const label = createFretLabel(fret);
-                cell.appendChild(label);
-            }
-            
-            // Mouse handlers for drag-to-create-barre and clicks
-            cell.addEventListener('mousedown', (e) => {
-                dragState.isDragging = true;
-                dragState.startString = string;
-                dragState.startFret = fret;
-                e.preventDefault();
+    cells.forEach(cell => {
+        const string = parseInt(cell.dataset.string);
+        const fret = parseInt(cell.dataset.fret);
+        
+        // Add event listeners to fret labels to prevent interactions from bubbling to cell
+        const label = cell.querySelector('.fret-label');
+        if (label) {
+            label.addEventListener('click', (e) => e.stopPropagation());
+            label.addEventListener('mousedown', (e) => e.stopPropagation());
+            label.addEventListener('mouseup', (e) => e.stopPropagation());
+            label.addEventListener('mouseenter', (e) => {
+                e.stopPropagation();
+                cell.classList.add('hover-disabled');
             });
-            
-            cell.addEventListener('mouseenter', (e) => {
-                if (dragState.isDragging && dragState.startFret === fret) {
-                    // Highlight the drag selection
-                    highlightDragSelection(dragState.startString, string, fret);
-                }
+            label.addEventListener('mouseleave', (e) => {
+                cell.classList.remove('hover-disabled');
             });
-            
-            cell.addEventListener('mouseup', (e) => {
-                if (dragState.isDragging) {
-                    // Check if this is a single click (same position) or a drag
-                    if (dragState.startString === string && dragState.startFret === fret) {
-                        // Single click
-                        handleFretClick(string, fret);
-                    } else {
-                        // Drag operation
-                        handleFretClick(string, fret);
-                    }
-                    handleDragEnd();
-                }
-            });
-            
-            grid.appendChild(cell);
         }
-    }
+        
+        // Mouse handlers for drag-to-create-barre and clicks
+        cell.addEventListener('mousedown', (e) => {
+            dragState.isDragging = true;
+            dragState.startString = string;
+            dragState.startFret = fret;
+            e.preventDefault();
+        });
+        
+        cell.addEventListener('mouseenter', (e) => {
+            if (dragState.isDragging && dragState.startFret === fret) {
+                // Highlight the drag selection
+                highlightDragSelection(dragState.startString, string, fret);
+            }
+        });
+        
+        cell.addEventListener('mouseup', (e) => {
+            if (dragState.isDragging) {
+                // Check if this is a single click (same position) or a drag
+                if (dragState.startString === string && dragState.startFret === fret) {
+                    // Single click
+                    handleFretClick(string, fret);
+                } else {
+                    // Drag operation
+                    handleFretClick(string, fret);
+                }
+                handleDragEnd();
+            }
+        });
+    });
     
     // Global mouseup to finish drag
     document.addEventListener('mouseup', (e) => {
@@ -139,18 +126,21 @@ function handleDragEnd() {
 }
 
 // Handle clicking on a fret cell
-function handleFretClick(string, fret) {
+function handleFretClick(string, gridFret) {
+    // Convert grid position to actual fret number
+    const actualFret = gridFret + chordState.startFret - 1;
+    
     // Check if clicking on a barre - if so, remove it
-    const barre = getBarreAt(string, fret);
+    const barre = getBarreAt(string, actualFret);
     if (barre) {
         chordState.barres = chordState.barres.filter(b => b !== barre);
         // Remove individual frets that were part of this barre
         const minString = Math.min(barre.startString, barre.endString);
         const maxString = Math.max(barre.startString, barre.endString);
         for (let s = minString; s <= maxString; s++) {
-            if (chordState.frets[s] === fret) {
+            if (chordState.frets[s] === actualFret) {
                 chordState.frets[s] = null;
-                chordState.strings[s] = 'o';
+                chordState.strings[s] = STRING_STATE_OPEN;
             }
         }
         updateDiagramDisplay();
@@ -159,15 +149,15 @@ function handleFretClick(string, fret) {
     }
     
     // Check if this was a drag operation
-    if (dragState.startString !== null && dragState.startString !== string && dragState.startFret === fret) {
-        // Create a barre
+    if (dragState.startString !== null && dragState.startString !== string && dragState.startFret === gridFret) {
+        // Create a barre - convert grid position to actual fret
         const minString = Math.min(dragState.startString, string);
         const maxString = Math.max(dragState.startString, string);
         
         // Only create barre if it spans at least 2 strings
         if (maxString - minString >= 1) {
             chordState.barres.push({
-                fret: fret,
+                fret: actualFret,
                 startString: dragState.startString,
                 endString: string
             });
@@ -176,7 +166,7 @@ function handleFretClick(string, fret) {
             for (let s = minString; s <= maxString; s++) {
                 // Only set the barre fret if there's no existing finger position on this string
                 if (chordState.frets[s] === null) {
-                    chordState.frets[s] = fret;
+                    chordState.frets[s] = actualFret;
                     chordState.strings[s] = null;
                 }
             }
@@ -188,13 +178,13 @@ function handleFretClick(string, fret) {
     }
     
     // Normal click behavior - toggle dot
-    if (chordState.frets[string] === fret) {
+    if (chordState.frets[string] === actualFret) {
         // Remove
         chordState.frets[string] = null;
         chordState.strings[string] = 'o';
     } else {
         // Place a dot at this position
-        chordState.frets[string] = fret;
+        chordState.frets[string] = actualFret;
         chordState.strings[string] = null; // Not open or muted
     }
     
@@ -208,28 +198,21 @@ function updateDiagramDisplay() {
     
     cells.forEach(cell => {
         const string = parseInt(cell.dataset.string);
-        const fret = parseInt(cell.dataset.fret);
+        const gridFret = parseInt(cell.dataset.fret);
+        const actualFret = gridFret + chordState.startFret - 1;
         
         cell.classList.remove('has-finger', 'has-dot', 'has-barre', 'barre-start', 'barre-middle', 'barre-end');
         
         // Clear content but preserve fret label if it exists
         const hasLabel = string === 0;
-        if (hasLabel) {
-            // Keep only the label, remove dot
-            const label = cell.querySelector('.fret-label');
-            cell.textContent = '';
-            if (label) {
-                cell.appendChild(label);
-            } else {
-                const newLabel = createFretLabel(fret);
-                cell.appendChild(newLabel);
-            }
-        } else {
-            cell.textContent = '';
+        const label = hasLabel ? cell.querySelector('.fret-label') : null;
+        cell.textContent = '';
+        if (label) {
+            cell.appendChild(label);
         }
         
         // Check if this position is part of a barre
-        const barre = getBarreAt(string, fret);
+        const barre = getBarreAt(string, actualFret);
         
         if (barre) {
             cell.classList.add('has-barre');
@@ -247,7 +230,7 @@ function updateDiagramDisplay() {
             const barreSymbol = document.createElement('span');
             barreSymbol.textContent = '=';
             cell.appendChild(barreSymbol);
-        } else if (chordState.frets[string] === fret) {
+        } else if (chordState.frets[string] === actualFret) {
             cell.classList.add('has-dot');
             const dot = document.createElement('span');
             dot.textContent = '●';
@@ -280,33 +263,53 @@ function updateStringMarkers() {
     });
 }
 
+// Update fret label displays based on startFret
+function updateFretLabels() {
+    const labels = document.querySelectorAll('.fret-label');
+    labels.forEach(label => {
+        const cell = label.closest('.fret-cell');
+        const fretIndex = parseInt(cell.dataset.fret);
+        const displayNumber = chordState.startFret + fretIndex - 1;
+        
+        // Update just the number text, preserving the edit icon if present
+        const numberSpan = label.querySelector('.fret-number');
+        if (numberSpan) {
+            numberSpan.textContent = displayNumber;
+        }
+    });
+}
+
 // Generate ASCII chord diagram from current state
 function generateChordDiagram() {
     const chordName = document.getElementById('chordName').value.trim() || 'Custom';
     
     // Build frets array for ASCII generation
     const frets = chordState.strings.map((state, i) => {
-        if (state === 'x') return 'x';
-        if (state === 'o' && chordState.frets[i] === null) return '0';
-        if (chordState.frets[i] !== null) return chordState.frets[i].toString();
+        if (state === STRING_STATE_MUTED) {
+            return STRING_STATE_MUTED;
+        }
+        if (state === STRING_STATE_OPEN && chordState.frets[i] === null) {
+            return '0';
+        }
+        if (chordState.frets[i] !== null) {
+            return chordState.frets[i].toString();
+        }
         return '0';
     });
     
     // Find the minimum and maximum fret positions (excluding muted/open strings)
     const fretValues = frets.map(f => {
-        if (f === 'x') return -1;
+        if (f === STRING_STATE_MUTED) {
+            return -1;
+        }
         return parseInt(f);
     });
     
     const playedFrets = fretValues.filter(f => f > 0);
-    const minFret = playedFrets.length > 0 ? Math.min(...playedFrets) : 1;
-    const maxFret = playedFrets.length > 0 ? Math.max(...playedFrets) : 5;
+    const maxFret = playedFrets.length > 0 ? Math.max(...playedFrets) : chordState.startFret + NUM_FRETS - 1;
     
-    // Determine starting fret for display
-    let startFret = 1;
-    if (minFret > 3) {
-        startFret = minFret;
-    }
+    // Use the custom startFret from chordState
+    const startFret = chordState.startFret;
     const endFret = Math.max(startFret + NUM_FRETS - 1, maxFret);
     
     let diagram = '';
@@ -410,10 +413,10 @@ document.querySelectorAll('.string-marker').forEach(marker => {
         
         // Only toggle if there's no finger placed on this string
         if (chordState.frets[string] === null) {
-            if (chordState.strings[string] === 'o') {
-                chordState.strings[string] = 'x';
-            } else if (chordState.strings[string] === 'x') {
-                chordState.strings[string] = 'o';
+            if (chordState.strings[string] === STRING_STATE_OPEN) {
+                chordState.strings[string] = STRING_STATE_MUTED;
+            } else if (chordState.strings[string] === STRING_STATE_MUTED) {
+                chordState.strings[string] = STRING_STATE_OPEN;
             }
             
             updateStringMarkers();
@@ -441,12 +444,14 @@ document.querySelectorAll('.edit-icon').forEach(editBtn => {
 
 // Clear all button
 document.getElementById('clearBtn').addEventListener('click', () => {
-    chordState.strings = ['o', 'o', 'o', 'o', 'o', 'o'];
+    chordState.strings = [STRING_STATE_OPEN, STRING_STATE_OPEN, STRING_STATE_OPEN, STRING_STATE_OPEN, STRING_STATE_OPEN, STRING_STATE_OPEN];
     chordState.frets = [null, null, null, null, null, null];
     chordState.stringNames = ['E', 'A', 'D', 'G', 'B', 'e'];
     chordState.barres = [];
+    chordState.startFret = 1;
     
     updateDiagramDisplay();
+    updateFretLabels();
     updateASCIIOutput();
 });
 
@@ -469,6 +474,40 @@ document.getElementById('copyBtn').addEventListener('click', () => {
     }).catch(err => {
         alert('Failed to copy to clipboard');
         console.error('Copy failed:', err);
+    });
+});
+
+// Handle fret label edit icon clicks
+document.querySelectorAll('.fret-label .edit-icon').forEach(editBtn => {
+    editBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const currentFret = chordState.startFret;
+        const newFret = prompt('Enter the first fret number:', currentFret);
+        
+        if (newFret !== null && newFret.trim() !== '') {
+            const fretNum = parseInt(newFret.trim());
+            if (!isNaN(fretNum) && fretNum >= 1) {
+                const oldStartFret = chordState.startFret;
+                const fretDelta = fretNum - oldStartFret;
+                
+                // Update all existing finger positions to maintain visual grid position
+                for (let i = 0; i < chordState.frets.length; i++) {
+                    if (chordState.frets[i] !== null) {
+                        chordState.frets[i] += fretDelta;
+                    }
+                }
+                
+                // Update all barres to maintain visual grid position
+                for (let barre of chordState.barres) {
+                    barre.fret += fretDelta;
+                }
+                
+                chordState.startFret = fretNum;
+                updateFretLabels();
+                updateDiagramDisplay();
+                updateASCIIOutput();
+            }
+        }
     });
 });
 
