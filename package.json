@@ -1,0 +1,25 @@
+{
+  "name": "ascii-chords",
+  "version": "1.0.0",
+  "description": "Guitar chord diagrams as ASCII art",
+  "main": "index.html",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "start": "npx serve .",
+    "playwright:install": "playwright install"
+  },
+  "keywords": [
+    "guitar",
+    "chord",
+    "ascii",
+    "diagram"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.58.1",
+    "@types/node": "^25.1.0"
+  }
+}
