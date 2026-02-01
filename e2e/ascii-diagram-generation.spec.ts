@@ -28,7 +28,7 @@ test.describe('ASCII Output and Export', () => {
     await barreStart.dragTo(barreEnd);
 
     // Verify barre shows as continuous line and combines with individual dots
-    await expect(page.getByText('[════════════════]')).toBeVisible();
+    await expect(page.getByText('[═════════════════════]')).toBeVisible();
 
     // Test ASCII output with mixed string states
     await page.getByRole('button', { name: 'Clear All' }).click();

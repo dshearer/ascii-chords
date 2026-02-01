@@ -360,11 +360,11 @@ function generateChordDiagram() {
                 } else {
                     // Part of barre
                     if (string === minString) {
-                        line += '[══';
+                        line += '[═══';
                     } else if (string === maxString) {
                         line += '══] ';
                     } else {
-                        line += '═══';
+                        line += '════';
                     }
                 }
             }

@@ -15,7 +15,7 @@ test.describe('Basic Chord Building', () => {
     await startCell.dragTo(endCell);
 
     // Verify a barre is created across all six strings
-    await expect(page.getByText('[════════════════]')).toBeVisible();
+    await expect(page.getByText('[═════════════════════]')).toBeVisible();
 
     // Create a partial barre from string 2 to string 4 on fret 3
     const partialStartCell = page.locator('[data-string="1"][data-fret="3"]');
@@ -24,7 +24,7 @@ test.describe('Basic Chord Building', () => {
     await partialStartCell.dragTo(partialEndCell);
 
     // Verify partial barre notation appears
-    await expect(page.getByText('│ [═══════] │ │')).toBeVisible();
+    await expect(page.getByText('[═════════]')).toBeVisible();
 
     // Click on any cell that's part of an existing barre to remove it
     await page.getByText('=').first().click();
