@@ -25,49 +25,49 @@
 
                 <div class="interactive-diagram">
                     <div class="string-markers" id="stringMarkers">
-                        <div class="string-marker" data-string="0">E<button class="edit-icon" title="Edit string name">✎</button><span class="marker-state">o</span></div>
-                        <div class="string-marker" data-string="1">A<button class="edit-icon" title="Edit string name">✎</button><span class="marker-state">o</span></div>
-                        <div class="string-marker" data-string="2">D<button class="edit-icon" title="Edit string name">✎</button><span class="marker-state">o</span></div>
-                        <div class="string-marker" data-string="3">G<button class="edit-icon" title="Edit string name">✎</button><span class="marker-state">o</span></div>
-                        <div class="string-marker" data-string="4">B<button class="edit-icon" title="Edit string name">✎</button><span class="marker-state">o</span></div>
-                        <div class="string-marker" data-string="5">e<button class="edit-icon" title="Edit string name">✎</button><span class="marker-state">o</span></div>
+                        <div class="string-marker" data-string="0" aria-label="String E: open">E<button class="edit-icon" title="Edit string name" aria-label="Edit string name">✎</button><span class="marker-state">o</span></div>
+                        <div class="string-marker" data-string="1" aria-label="String A: open">A<button class="edit-icon" title="Edit string name" aria-label="Edit string name">✎</button><span class="marker-state">o</span></div>
+                        <div class="string-marker" data-string="2" aria-label="String D: open">D<button class="edit-icon" title="Edit string name" aria-label="Edit string name">✎</button><span class="marker-state">o</span></div>
+                        <div class="string-marker" data-string="3" aria-label="String G: open">G<button class="edit-icon" title="Edit string name" aria-label="Edit string name">✎</button><span class="marker-state">o</span></div>
+                        <div class="string-marker" data-string="4" aria-label="String B: open">B<button class="edit-icon" title="Edit string name" aria-label="Edit string name">✎</button><span class="marker-state">o</span></div>
+                        <div class="string-marker" data-string="5" aria-label="String e: open">e<button class="edit-icon" title="Edit string name" aria-label="Edit string name">✎</button><span class="marker-state">o</span></div>
                     </div>
-                    <div class="diagram-grid" id="diagramGrid">
+                    <div class="diagram-grid" id="diagramGrid" role="grid" aria-label="Fretboard diagram">
                         <!-- Fret 1 -->
-                        <div class="fret-cell" data-fret="1" data-string="0"><div class="fret-label"><span class="fret-number">1</span><button class="edit-icon" title="Edit starting fret">✎</button></div></div>
-                        <div class="fret-cell" data-fret="1" data-string="1"></div>
-                        <div class="fret-cell" data-fret="1" data-string="2"></div>
-                        <div class="fret-cell" data-fret="1" data-string="3"></div>
-                        <div class="fret-cell" data-fret="1" data-string="4"></div>
-                        <div class="fret-cell" data-fret="1" data-string="5"></div>
+                        <div class="fret-cell" data-fret="1" data-string="0" role="gridcell" tabindex="0" aria-label="String E, Fret 1"><div class="fret-label"><span class="fret-number">1</span><button class="edit-icon" title="Edit starting fret" aria-label="Edit starting fret">✎</button></div></div>
+                        <div class="fret-cell" data-fret="1" data-string="1" role="gridcell" tabindex="-1" aria-label="String A, Fret 1"></div>
+                        <div class="fret-cell" data-fret="1" data-string="2" role="gridcell" tabindex="-1" aria-label="String D, Fret 1"></div>
+                        <div class="fret-cell" data-fret="1" data-string="3" role="gridcell" tabindex="-1" aria-label="String G, Fret 1"></div>
+                        <div class="fret-cell" data-fret="1" data-string="4" role="gridcell" tabindex="-1" aria-label="String B, Fret 1"></div>
+                        <div class="fret-cell" data-fret="1" data-string="5" role="gridcell" tabindex="-1" aria-label="String e, Fret 1"></div>
                         <!-- Fret 2 -->
-                        <div class="fret-cell" data-fret="2" data-string="0"><div class="fret-label"><span class="fret-number">2</span></div></div>
-                        <div class="fret-cell" data-fret="2" data-string="1"></div>
-                        <div class="fret-cell" data-fret="2" data-string="2"></div>
-                        <div class="fret-cell" data-fret="2" data-string="3"></div>
-                        <div class="fret-cell" data-fret="2" data-string="4"></div>
-                        <div class="fret-cell" data-fret="2" data-string="5"></div>
+                        <div class="fret-cell" data-fret="2" data-string="0" role="gridcell" tabindex="-1" aria-label="String E, Fret 2"><div class="fret-label"><span class="fret-number">2</span></div></div>
+                        <div class="fret-cell" data-fret="2" data-string="1" role="gridcell" tabindex="-1" aria-label="String A, Fret 2"></div>
+                        <div class="fret-cell" data-fret="2" data-string="2" role="gridcell" tabindex="-1" aria-label="String D, Fret 2"></div>
+                        <div class="fret-cell" data-fret="2" data-string="3" role="gridcell" tabindex="-1" aria-label="String G, Fret 2"></div>
+                        <div class="fret-cell" data-fret="2" data-string="4" role="gridcell" tabindex="-1" aria-label="String B, Fret 2"></div>
+                        <div class="fret-cell" data-fret="2" data-string="5" role="gridcell" tabindex="-1" aria-label="String e, Fret 2"></div>
                         <!-- Fret 3 -->
-                        <div class="fret-cell" data-fret="3" data-string="0"><div class="fret-label"><span class="fret-number">3</span></div></div>
-                        <div class="fret-cell" data-fret="3" data-string="1"></div>
-                        <div class="fret-cell" data-fret="3" data-string="2"></div>
-                        <div class="fret-cell" data-fret="3" data-string="3"></div>
-                        <div class="fret-cell" data-fret="3" data-string="4"></div>
-                        <div class="fret-cell" data-fret="3" data-string="5"></div>
+                        <div class="fret-cell" data-fret="3" data-string="0" role="gridcell" tabindex="-1" aria-label="String E, Fret 3"><div class="fret-label"><span class="fret-number">3</span></div></div>
+                        <div class="fret-cell" data-fret="3" data-string="1" role="gridcell" tabindex="-1" aria-label="String A, Fret 3"></div>
+                        <div class="fret-cell" data-fret="3" data-string="2" role="gridcell" tabindex="-1" aria-label="String D, Fret 3"></div>
+                        <div class="fret-cell" data-fret="3" data-string="3" role="gridcell" tabindex="-1" aria-label="String G, Fret 3"></div>
+                        <div class="fret-cell" data-fret="3" data-string="4" role="gridcell" tabindex="-1" aria-label="String B, Fret 3"></div>
+                        <div class="fret-cell" data-fret="3" data-string="5" role="gridcell" tabindex="-1" aria-label="String e, Fret 3"></div>
                         <!-- Fret 4 -->
-                        <div class="fret-cell" data-fret="4" data-string="0"><div class="fret-label"><span class="fret-number">4</span></div></div>
-                        <div class="fret-cell" data-fret="4" data-string="1"></div>
-                        <div class="fret-cell" data-fret="4" data-string="2"></div>
-                        <div class="fret-cell" data-fret="4" data-string="3"></div>
-                        <div class="fret-cell" data-fret="4" data-string="4"></div>
-                        <div class="fret-cell" data-fret="4" data-string="5"></div>
+                        <div class="fret-cell" data-fret="4" data-string="0" role="gridcell" tabindex="-1" aria-label="String E, Fret 4"><div class="fret-label"><span class="fret-number">4</span></div></div>
+                        <div class="fret-cell" data-fret="4" data-string="1" role="gridcell" tabindex="-1" aria-label="String A, Fret 4"></div>
+                        <div class="fret-cell" data-fret="4" data-string="2" role="gridcell" tabindex="-1" aria-label="String D, Fret 4"></div>
+                        <div class="fret-cell" data-fret="4" data-string="3" role="gridcell" tabindex="-1" aria-label="String G, Fret 4"></div>
+                        <div class="fret-cell" data-fret="4" data-string="4" role="gridcell" tabindex="-1" aria-label="String B, Fret 4"></div>
+                        <div class="fret-cell" data-fret="4" data-string="5" role="gridcell" tabindex="-1" aria-label="String e, Fret 4"></div>
                         <!-- Fret 5 -->
-                        <div class="fret-cell" data-fret="5" data-string="0"><div class="fret-label"><span class="fret-number">5</span></div></div>
-                        <div class="fret-cell" data-fret="5" data-string="1"></div>
-                        <div class="fret-cell" data-fret="5" data-string="2"></div>
-                        <div class="fret-cell" data-fret="5" data-string="3"></div>
-                        <div class="fret-cell" data-fret="5" data-string="4"></div>
-                        <div class="fret-cell" data-fret="5" data-string="5"></div>
+                        <div class="fret-cell" data-fret="5" data-string="0" role="gridcell" tabindex="-1" aria-label="String E, Fret 5"><div class="fret-label"><span class="fret-number">5</span></div></div>
+                        <div class="fret-cell" data-fret="5" data-string="1" role="gridcell" tabindex="-1" aria-label="String A, Fret 5"></div>
+                        <div class="fret-cell" data-fret="5" data-string="2" role="gridcell" tabindex="-1" aria-label="String D, Fret 5"></div>
+                        <div class="fret-cell" data-fret="5" data-string="3" role="gridcell" tabindex="-1" aria-label="String G, Fret 5"></div>
+                        <div class="fret-cell" data-fret="5" data-string="4" role="gridcell" tabindex="-1" aria-label="String B, Fret 5"></div>
+                        <div class="fret-cell" data-fret="5" data-string="5" role="gridcell" tabindex="-1" aria-label="String e, Fret 5"></div>
                     </div>
                     <div class="fretboard-actions">
                         <button id="undoBtn" class="undo-redo-btn" disabled>Undo</button>
@@ -78,8 +78,8 @@
 
             <div class="output-section">
                 <h2>ASCII Output</h2>
-                <pre id="chordDiagram">Click on the diagram to build your chord</pre>
-                <button id="copyBtn" class="copy-btn">Copy to Clipboard</button>
+                <pre id="chordDiagram" role="region" aria-label="ASCII chord diagram">Click on the diagram to build your chord</pre>
+                <button id="copyBtn" class="copy-btn" aria-label="Copy chord diagram to clipboard">Copy to Clipboard</button>
             </div>
         </div>
     </div>

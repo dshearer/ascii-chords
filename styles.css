@@ -248,6 +248,13 @@ h2 {
     border-color: #667eea;
 }
 
+.fret-cell:focus {
+    outline: 3px solid #667eea;
+    outline-offset: -1px;
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.4);
+    z-index: 1;
+}
+
 .fret-cell.has-finger {
     background: #667eea;
     color: white;

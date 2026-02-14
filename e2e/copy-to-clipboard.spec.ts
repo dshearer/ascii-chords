@@ -34,13 +34,13 @@ test('Copy to Clipboard', async ({ page }) => {
     await expect(page.getByText('[●]')).toBeVisible();
 
     // Click the 'Copy to Clipboard' button
-    await page.getByRole('button', { name: 'Copy to Clipboard' }).click();
+    await page.getByRole('button', { name: 'Copy chord diagram to clipboard' }).click();
 
     // Verify button text changes to 'Copied! ✓'
     await expect(page.getByRole('button', { name: 'Copied! ✓' })).toBeVisible();
 
     // Wait and observe button state reset
-    await expect(page.getByRole('button', { name: 'Copy to Clipboard' })).toBeVisible({ timeout: 5000 });
+    await expect(page.getByRole('button', { name: 'Copy chord diagram to clipboard' })).toBeVisible({ timeout: 5000 });
 
     // Verify content would be copied to system clipboard (we can't easily test actual clipboard in CI)
     // Instead verify the ASCII output contains expected elements

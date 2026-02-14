@@ -13,7 +13,7 @@ test.describe('String State Management', () => {
       expect(dialog.message()).toContain('Enter new name for string 3:');
       await dialog.accept('C');
     });
-    await page.getByRole('button', { name: '✎' }).nth(2).click();
+    await page.getByRole('button', { name: 'Edit string name' }).nth(2).click();
 
     // Verify the string name changed from 'D' to 'C'
     await expect(page.locator('.string-marker').nth(2)).toContainText('C');
@@ -23,7 +23,7 @@ test.describe('String State Management', () => {
     page.once('dialog', async (dialog) => {
       await dialog.accept('D');
     });
-    await page.getByRole('button', { name: '✎' }).first().click();
+    await page.getByRole('button', { name: 'Edit string name' }).first().click();
 
     // Verify ASCII output reflects the custom tuning
     await expect(page.getByText('D A C G B e')).toBeVisible();

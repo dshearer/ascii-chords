@@ -137,6 +137,54 @@ function initializeDiagram() {
             handleDragEnd();
         }
     });
+
+    // Keyboard navigation for the fretboard grid
+    const grid = document.getElementById('diagramGrid');
+    grid.addEventListener('keydown', (e) => {
+        const cell = e.target.closest('.fret-cell');
+        if (!cell) return;
+
+        const col = parseInt(cell.dataset.string);
+        const row = parseInt(cell.dataset.fret);
+        const numStrings = 6;
+        let newCol = col;
+        let newRow = row;
+
+        switch (e.key) {
+            case 'ArrowRight':
+                newCol = (col + 1) % numStrings;
+                e.preventDefault();
+                break;
+            case 'ArrowLeft':
+                newCol = (col - 1 + numStrings) % numStrings;
+                e.preventDefault();
+                break;
+            case 'ArrowDown':
+                newRow = row < NUM_FRETS ? row + 1 : 1;
+                e.preventDefault();
+                break;
+            case 'ArrowUp':
+                newRow = row > 1 ? row - 1 : NUM_FRETS;
+                e.preventDefault();
+                break;
+            case 'Enter':
+            case ' ':
+                e.preventDefault();
+                handleFretClick(col, row);
+                return;
+            default:
+                return;
+        }
+
+        const target = grid.querySelector(
+            `.fret-cell[data-string="${newCol}"][data-fret="${newRow}"]`
+        );
+        if (target) {
+            cell.setAttribute('tabindex', '-1');
+            target.setAttribute('tabindex', '0');
+            target.focus();
+        }
+    });
 }
 
 // Check if a string/fret position is part of a barre
@@ -313,13 +361,19 @@ function updateStringMarkers() {
         // Update the string name (preserve edit icon)
         marker.childNodes[0].textContent = chordState.stringNames[index];
 
+        let stateLabel;
         if (state === 'o') {
             stateSpan.textContent = 'o';
+            stateLabel = 'open';
         } else if (state === 'x') {
             stateSpan.textContent = 'x';
+            stateLabel = 'muted';
         } else {
             stateSpan.textContent = '';
+            stateLabel = 'fretted';
         }
+
+        marker.setAttribute('aria-label', `String ${chordState.stringNames[index]}: ${stateLabel}`);
     });
 }
 
@@ -534,8 +588,10 @@ document.getElementById('copyBtn').addEventListener('click', () => {
         const btn = document.getElementById('copyBtn');
         const originalText = btn.textContent;
         btn.textContent = 'Copied! ✓';
+            btn.setAttribute('aria-label', 'Copied! ✓');
         setTimeout(() => {
             btn.textContent = originalText;
+            btn.setAttribute('aria-label', 'Copy chord diagram to clipboard');
         }, 2000);
     }).catch(err => {
         alert('Failed to copy to clipboard');

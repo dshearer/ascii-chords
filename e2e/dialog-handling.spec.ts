@@ -13,7 +13,7 @@ test.describe('Edge Cases and Error Handling', () => {
       expect(dialog.message()).toContain('Enter new name for string 3:');
       await dialog.dismiss(); // Cancel the dialog
     });
-    await page.getByRole('button', { name: '✎' }).nth(2).click();
+    await page.getByRole('button', { name: 'Edit string name' }).nth(2).click();
 
     // Verify string name remains unchanged and no error state occurs
     await expect(page.locator('.string-marker').nth(2)).toContainText('D');
@@ -23,7 +23,7 @@ test.describe('Edge Cases and Error Handling', () => {
     page.once('dialog', async (dialog) => {
       await dialog.accept(''); // Enter empty string
     });
-    await page.getByRole('button', { name: '✎' }).nth(2).click();
+    await page.getByRole('button', { name: 'Edit string name' }).nth(2).click();
 
     // Verify string name remains unchanged and dialog closes gracefully
     await expect(page.locator('.string-marker').nth(2)).toContainText('D');
@@ -32,7 +32,7 @@ test.describe('Edge Cases and Error Handling', () => {
     page.once('dialog', async (dialog) => {
       await dialog.accept('VeryLongStringNameWithManyCharacters'); 
     });
-    await page.getByRole('button', { name: '✎' }).nth(2).click();
+    await page.getByRole('button', { name: 'Edit string name' }).nth(2).click();
 
     // Verify very long names are accepted and layout remains functional
     await expect(page.locator('.string-marker').nth(2)).toContainText('VeryLongStringNameWithManyCharacters');
@@ -42,7 +42,7 @@ test.describe('Edge Cases and Error Handling', () => {
     page.once('dialog', async (dialog) => {
       await dialog.accept('A♯/B♭'); // Special music characters
     });
-    await page.getByRole('button', { name: '✎' }).nth(1).click();
+    await page.getByRole('button', { name: 'Edit string name' }).nth(1).click();
 
     // Verify special characters are handled properly in the string marker
     await expect(page.locator('.string-marker').nth(1)).toContainText('A♯/B♭');
@@ -51,7 +51,7 @@ test.describe('Edge Cases and Error Handling', () => {
     page.once('dialog', async (dialog) => {
       await dialog.accept('🎸'); // Unicode emoji
     });
-    await page.getByRole('button', { name: '✎' }).nth(0).click();
+    await page.getByRole('button', { name: 'Edit string name' }).nth(0).click();
 
     // Verify Unicode characters display correctly
     await expect(page.getByText('🎸')).toHaveCount(3); // One in header, one in string name, one in ASCII output

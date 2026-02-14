@@ -26,7 +26,7 @@ test.describe('Chord Management', () => {
     page.once('dialog', async (dialog) => {
       await dialog.accept('C');
     });
-    await page.getByRole('button', { name: '✎' }).nth(2).click();
+    await page.getByRole('button', { name: 'Edit string name' }).nth(2).click();
 
     // Change chord name
     await page.getByRole('textbox', { name: 'Chord Name:' }).fill('Complex Chord');
