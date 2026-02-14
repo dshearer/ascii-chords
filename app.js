@@ -513,6 +513,8 @@ document.querySelectorAll('.string-marker .edit-icon').forEach(editBtn => {
         input.focus();
         input.select();
 
+        let cancelled = false;
+
         function commitEdit() {
             const newName = input.value.trim();
             if (newName !== '' && newName !== chordState.stringNames[string]) {
@@ -527,6 +529,7 @@ document.querySelectorAll('.string-marker .edit-icon').forEach(editBtn => {
         }
 
         function cancelEdit() {
+            cancelled = true;
             input.remove();
             stateSpan.style.display = '';
             editBtn.style.display = '';
@@ -545,6 +548,7 @@ document.querySelectorAll('.string-marker .edit-icon').forEach(editBtn => {
         });
 
         input.addEventListener('blur', () => {
+            if (cancelled) return;
             commitEdit();
         });
     });
@@ -637,6 +641,8 @@ document.querySelectorAll('.fret-label .edit-icon').forEach(editBtn => {
             }
         }
 
+        let cancelled = false;
+
         function commitFretEdit() {
             const val = input.value;
             input.remove();
@@ -646,6 +652,7 @@ document.querySelectorAll('.fret-label .edit-icon').forEach(editBtn => {
         }
 
         function cancelFretEdit() {
+            cancelled = true;
             input.remove();
             numberSpan.style.display = '';
             editBtn.style.display = '';
@@ -663,6 +670,7 @@ document.querySelectorAll('.fret-label .edit-icon').forEach(editBtn => {
         });
 
         input.addEventListener('blur', () => {
+            if (cancelled) return;
             commitFretEdit();
         });
     });
