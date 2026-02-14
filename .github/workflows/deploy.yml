@@ -25,11 +25,15 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
+      - name: Prepare static assets
+        run: |
+          mkdir _site
+          cp index.html app.js styles.css _site/
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload the entire repository as static files
-          path: '.'
+          path: '_site'
 
   # Deployment job
   deploy:
