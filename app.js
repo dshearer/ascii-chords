@@ -89,7 +89,7 @@ const CHORD_PRESETS = {
     },
     E: {
         name: 'E',
-        strings: [null, null, null, null, STRING_STATE_OPEN, STRING_STATE_OPEN],
+        strings: [STRING_STATE_OPEN, null, null, null, STRING_STATE_OPEN, STRING_STATE_OPEN],
         frets: [null, 2, 2, 1, null, null],
         barres: [],
         startFret: 1
@@ -117,7 +117,7 @@ const CHORD_PRESETS = {
     },
     Em: {
         name: 'Em',
-        strings: [null, null, null, STRING_STATE_OPEN, STRING_STATE_OPEN, STRING_STATE_OPEN],
+        strings: [STRING_STATE_OPEN, null, null, STRING_STATE_OPEN, STRING_STATE_OPEN, STRING_STATE_OPEN],
         frets: [null, 2, 2, null, null, null],
         barres: [],
         startFret: 1
