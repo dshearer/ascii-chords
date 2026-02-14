@@ -519,6 +519,9 @@ document.getElementById('clearBtn').addEventListener('click', () => {
 });
 
 // Update chord name
+document.getElementById('chordName').addEventListener('focus', () => {
+    pushUndo();
+});
 document.getElementById('chordName').addEventListener('input', () => {
     updateASCIIOutput();
 });
