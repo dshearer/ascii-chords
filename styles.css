@@ -102,6 +102,24 @@ h2 {
     background: #c82333;
 }
 
+.clear-fingers-btn {
+    background: #6c757d;
+}
+
+.clear-fingers-btn:hover {
+    background: #5a6268;
+}
+
+.fretboard-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.fretboard-actions .clear-btn {
+    flex: 1;
+}
+
 .instructions {
     background: white;
     padding: 15px;

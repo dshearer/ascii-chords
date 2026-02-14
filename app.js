@@ -442,14 +442,29 @@ document.querySelectorAll('.edit-icon').forEach(editBtn => {
     });
 });
 
-// Clear all button
-document.getElementById('clearBtn').addEventListener('click', () => {
+// Clear fingers button — only resets dots and barres, preserves string states/names/chord name/fret number
+document.getElementById('clearFingersBtn').addEventListener('click', () => {
+    chordState.frets = [null, null, null, null, null, null];
+    chordState.barres = [];
+    // Restore any "played" strings (null state from having a finger) back to open
+    for (let i = 0; i < chordState.strings.length; i++) {
+        if (chordState.strings[i] === STRING_STATE_PLAYED) {
+            chordState.strings[i] = STRING_STATE_OPEN;
+        }
+    }
+
+    updateDiagramDisplay();
+    updateASCIIOutput();
+});
+
+// Clear all button — resets everything
+document.getElementById('clearAllBtn').addEventListener('click', () => {
     chordState.strings = [STRING_STATE_OPEN, STRING_STATE_OPEN, STRING_STATE_OPEN, STRING_STATE_OPEN, STRING_STATE_OPEN, STRING_STATE_OPEN];
     chordState.frets = [null, null, null, null, null, null];
     chordState.stringNames = ['E', 'A', 'D', 'G', 'B', 'e'];
     chordState.barres = [];
     chordState.startFret = 1;
-    
+
     updateDiagramDisplay();
     updateFretLabels();
     updateASCIIOutput();

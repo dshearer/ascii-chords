@@ -113,7 +113,7 @@ test.describe('Fret Number Customization', () => {
         await expect(fretNumber).toHaveText('7');
         
         // Click clear all
-        await page.click('#clearBtn');
+        await page.click('#clearAllBtn');
         
         // Fret should reset to 1
         await expect(fretNumber).toHaveText('1');
