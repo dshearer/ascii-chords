@@ -22,11 +22,11 @@ test.describe('Chord Management', () => {
     // Mute a string
     await page.getByText('o').nth(3).click();
 
-    // Customize string name
-    page.once('dialog', async (dialog) => {
-      await dialog.accept('C');
-    });
-    await page.getByRole('button', { name: '✎' }).nth(2).click();
+    // Customize string name via inline edit
+    await page.locator('.string-marker[data-string="2"] .edit-icon').click();
+    const nameInput = page.locator('.string-marker .inline-edit');
+    await nameInput.fill('C');
+    await nameInput.press('Enter');
 
     // Change chord name
     await page.getByRole('textbox', { name: 'Chord Name:' }).fill('Complex Chord');

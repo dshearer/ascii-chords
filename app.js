@@ -486,21 +486,67 @@ document.querySelectorAll('.string-marker').forEach(marker => {
     });
 });
 
-// Handle edit icon clicks
-document.querySelectorAll('.edit-icon').forEach(editBtn => {
+// Handle edit icon clicks — show inline input for string name editing
+document.querySelectorAll('.string-marker .edit-icon').forEach(editBtn => {
     editBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         const marker = editBtn.closest('.string-marker');
+        if (!marker) return;
+        // Don't open another input if one is already active
+        if (marker.querySelector('.inline-edit')) return;
         const string = parseInt(marker.dataset.string);
         const currentName = chordState.stringNames[string];
-        const newName = prompt(`Enter new name for string ${string + 1}:`, currentName);
 
-        if (newName !== null && newName.trim() !== '') {
-            pushUndo();
-            chordState.stringNames[string] = newName.trim();
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'inline-edit';
+        input.value = currentName;
+
+        // Hide existing content while editing
+        const nameNode = marker.childNodes[0];
+        const stateSpan = marker.querySelector('.marker-state');
+        nameNode.textContent = '';
+        stateSpan.style.display = 'none';
+        editBtn.style.display = 'none';
+
+        marker.insertBefore(input, editBtn);
+        input.focus();
+        input.select();
+
+        function commitEdit() {
+            const newName = input.value.trim();
+            if (newName !== '' && newName !== chordState.stringNames[string]) {
+                pushUndo();
+                chordState.stringNames[string] = newName;
+            }
+            input.remove();
+            stateSpan.style.display = '';
+            editBtn.style.display = '';
             updateStringMarkers();
             updateASCIIOutput();
         }
+
+        function cancelEdit() {
+            input.remove();
+            stateSpan.style.display = '';
+            editBtn.style.display = '';
+            updateStringMarkers();
+        }
+
+        input.addEventListener('keydown', (ev) => {
+            ev.stopPropagation();
+            if (ev.key === 'Enter') {
+                ev.preventDefault();
+                commitEdit();
+            } else if (ev.key === 'Escape') {
+                ev.preventDefault();
+                cancelEdit();
+            }
+        });
+
+        input.addEventListener('blur', () => {
+            commitEdit();
+        });
     });
 });
 
@@ -543,16 +589,31 @@ document.getElementById('copyBtn').addEventListener('click', () => {
     });
 });
 
-// Handle fret label edit icon clicks
+// Handle fret label edit icon clicks — show inline input for fret number editing
 document.querySelectorAll('.fret-label .edit-icon').forEach(editBtn => {
     editBtn.addEventListener('click', (e) => {
         e.stopPropagation();
+        const label = editBtn.closest('.fret-label');
+        if (!label) return;
+        // Don't open another input if one is already active
+        if (label.querySelector('.inline-edit')) return;
         const currentFret = chordState.startFret;
-        const newFret = prompt('Enter the first fret number:', currentFret);
+        const numberSpan = label.querySelector('.fret-number');
 
-        if (newFret !== null && newFret.trim() !== '') {
-            const fretNum = parseInt(newFret.trim());
-            if (!isNaN(fretNum) && fretNum >= 1) {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'inline-edit inline-edit-fret';
+        input.value = currentFret;
+
+        numberSpan.style.display = 'none';
+        editBtn.style.display = 'none';
+        label.insertBefore(input, editBtn);
+        input.focus();
+        input.select();
+
+        function applyFretChange(val) {
+            const fretNum = parseInt(val.trim());
+            if (!isNaN(fretNum) && fretNum >= 1 && fretNum !== chordState.startFret) {
                 pushUndo();
                 const oldStartFret = chordState.startFret;
                 const fretDelta = fretNum - oldStartFret;
@@ -575,6 +636,35 @@ document.querySelectorAll('.fret-label .edit-icon').forEach(editBtn => {
                 updateASCIIOutput();
             }
         }
+
+        function commitFretEdit() {
+            const val = input.value;
+            input.remove();
+            numberSpan.style.display = '';
+            editBtn.style.display = '';
+            applyFretChange(val);
+        }
+
+        function cancelFretEdit() {
+            input.remove();
+            numberSpan.style.display = '';
+            editBtn.style.display = '';
+        }
+
+        input.addEventListener('keydown', (ev) => {
+            ev.stopPropagation();
+            if (ev.key === 'Enter') {
+                ev.preventDefault();
+                commitFretEdit();
+            } else if (ev.key === 'Escape') {
+                ev.preventDefault();
+                cancelFretEdit();
+            }
+        });
+
+        input.addEventListener('blur', () => {
+            commitFretEdit();
+        });
     });
 });
 
