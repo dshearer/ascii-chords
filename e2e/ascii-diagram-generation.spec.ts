@@ -9,7 +9,7 @@ test.describe('ASCII Output and Export', () => {
     await page.goto('http://localhost:3000');
 
     // Load the application and observe the default empty diagram
-    await expect(page.getByText('Custom')).toBeVisible();
+    await expect(page.locator('#chordName')).toHaveValue('Custom');
     await expect(page.getByText('E A D G B e')).toBeVisible();
     await expect(page.locator('#chordDiagram')).toContainText('   o   o   o   o   o   o');
     await expect(page.getByText('│ │ │ │ │ │')).toBeVisible();

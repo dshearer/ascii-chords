@@ -71,6 +71,105 @@ function updateUndoRedoButtons() {
     if (redoBtn) redoBtn.disabled = redoStack.length === 0;
 }
 
+// Chord presets
+const CHORD_PRESETS = {
+    C: {
+        name: 'C',
+        strings: [STRING_STATE_MUTED, null, null, STRING_STATE_OPEN, null, STRING_STATE_OPEN],
+        frets: [null, 3, 2, null, 1, null],
+        barres: [],
+        startFret: 1
+    },
+    D: {
+        name: 'D',
+        strings: [STRING_STATE_MUTED, STRING_STATE_MUTED, STRING_STATE_OPEN, null, null, null],
+        frets: [null, null, null, 2, 3, 2],
+        barres: [],
+        startFret: 1
+    },
+    E: {
+        name: 'E',
+        strings: [null, null, null, null, STRING_STATE_OPEN, STRING_STATE_OPEN],
+        frets: [null, 2, 2, 1, null, null],
+        barres: [],
+        startFret: 1
+    },
+    G: {
+        name: 'G',
+        strings: [null, null, STRING_STATE_OPEN, STRING_STATE_OPEN, STRING_STATE_OPEN, null],
+        frets: [3, 2, null, null, null, 3],
+        barres: [],
+        startFret: 1
+    },
+    A: {
+        name: 'A',
+        strings: [STRING_STATE_MUTED, null, null, null, null, STRING_STATE_OPEN],
+        frets: [null, null, 2, 2, 2, null],
+        barres: [],
+        startFret: 1
+    },
+    Am: {
+        name: 'Am',
+        strings: [STRING_STATE_MUTED, null, null, null, null, STRING_STATE_OPEN],
+        frets: [null, null, 2, 2, 1, null],
+        barres: [],
+        startFret: 1
+    },
+    Em: {
+        name: 'Em',
+        strings: [null, null, null, STRING_STATE_OPEN, STRING_STATE_OPEN, STRING_STATE_OPEN],
+        frets: [null, 2, 2, null, null, null],
+        barres: [],
+        startFret: 1
+    },
+    Dm: {
+        name: 'Dm',
+        strings: [STRING_STATE_MUTED, STRING_STATE_MUTED, STRING_STATE_OPEN, null, null, null],
+        frets: [null, null, null, 2, 3, 1],
+        barres: [],
+        startFret: 1
+    },
+    F: {
+        name: 'F',
+        strings: [null, null, null, null, null, null],
+        frets: [1, 3, 3, 2, 1, 1],
+        barres: [{ fret: 1, startString: 0, endString: 5 }],
+        startFret: 1
+    },
+    Bm: {
+        name: 'Bm',
+        strings: [STRING_STATE_MUTED, null, null, null, null, null],
+        frets: [null, 2, 4, 4, 3, 2],
+        barres: [{ fret: 2, startString: 1, endString: 5 }],
+        startFret: 1
+    }
+};
+
+// Load a chord preset
+function loadPreset(name) {
+    pushUndo();
+    if (name === 'custom') {
+        chordState.strings = [STRING_STATE_OPEN, STRING_STATE_OPEN, STRING_STATE_OPEN, STRING_STATE_OPEN, STRING_STATE_OPEN, STRING_STATE_OPEN];
+        chordState.frets = [null, null, null, null, null, null];
+        chordState.barres = [];
+        chordState.startFret = 1;
+        chordState.stringNames = ['E', 'A', 'D', 'G', 'B', 'e'];
+        document.getElementById('chordName').value = 'Custom';
+    } else {
+        const preset = CHORD_PRESETS[name];
+        if (!preset) return;
+        chordState.strings = [...preset.strings];
+        chordState.frets = [...preset.frets];
+        chordState.barres = preset.barres.map(b => ({ ...b }));
+        chordState.startFret = preset.startFret;
+        chordState.stringNames = ['E', 'A', 'D', 'G', 'B', 'e'];
+        document.getElementById('chordName').value = preset.name;
+    }
+    updateDiagramDisplay();
+    updateFretLabels();
+    updateASCIIOutput();
+}
+
 // Drag state for barre creation
 let dragState = {
     isDragging: false,
@@ -513,6 +612,7 @@ document.getElementById('clearBtn').addEventListener('click', () => {
     chordState.barres = [];
     chordState.startFret = 1;
 
+    document.getElementById('presetSelect').value = 'custom';
     updateDiagramDisplay();
     updateFretLabels();
     updateASCIIOutput();
@@ -592,6 +692,11 @@ document.addEventListener('keydown', (e) => {
         e.preventDefault();
         redo();
     }
+});
+
+// Preset selector
+document.getElementById('presetSelect').addEventListener('change', (e) => {
+    loadPreset(e.target.value);
 });
 
 // Initialize on load

@@ -19,8 +19,8 @@ test.describe('Chord Management', () => {
     const barreEndCell = page.locator('[data-string="3"][data-fret="3"]');
     await barreStartCell.dragTo(barreEndCell);
 
-    // Mute a string
-    await page.getByText('o').nth(3).click();
+    // Mute a string by clicking its string marker
+    await page.locator('.string-marker[data-string="5"]').click();
 
     // Customize string name
     page.once('dialog', async (dialog) => {
@@ -34,7 +34,7 @@ test.describe('Chord Management', () => {
     // Verify complex chord is created
     await expect(page.getByText('●', { exact: true })).toHaveCount(2); // Individual dots
     await expect(page.getByText('=', { exact: true })).toHaveCount(3); // Barre symbols
-    await expect(page.getByText('x', { exact: true })).toBeVisible();
+    await expect(page.locator('.marker-state').filter({ hasText: 'x' })).toBeVisible();
     await expect(page.locator('.string-marker').nth(2)).toContainText('C');
 
     // Click the 'Clear All' button
