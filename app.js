@@ -322,6 +322,11 @@ function updateDiagramDisplay() {
         // Check if this position is part of a barre
         const barre = getBarreAt(string, actualFret);
 
+        // Build the aria-label based on current cell state
+        const stringName = chordState.stringNames[string];
+        const displayFret = actualFret;
+        let cellState = '';
+
         if (barre) {
             cell.classList.add('has-barre');
             const minString = Math.min(barre.startString, barre.endString);
@@ -338,12 +343,16 @@ function updateDiagramDisplay() {
             const barreSymbol = document.createElement('span');
             barreSymbol.textContent = '=';
             cell.appendChild(barreSymbol);
+            cellState = ', barre';
         } else if (chordState.frets[string] === actualFret) {
             cell.classList.add('has-dot');
             const dot = document.createElement('span');
             dot.textContent = '●';
             cell.appendChild(dot);
+            cellState = ', finger placed';
         }
+
+        cell.setAttribute('aria-label', `String ${stringName}, Fret ${displayFret}${cellState}`);
     });
 
     // Update string markers
